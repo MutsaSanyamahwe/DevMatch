@@ -303,12 +303,13 @@ export default function SignupPage() {
                         className="text-center text-xs text-zinc-600 mt-7"
                     >
                         no account?{" "}
-                        <a
+                        <button
+                            type="button"
                             onClick={() => navigate("/login")}
                             className="text-indigo-500 hover:text-indigo-400 transition-colors font-medium"
                         >
                             git init --already have an account →
-                        </a>
+                        </button>
                     </motion.p>
 
                 </div>
