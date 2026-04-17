@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SignupPage() {
     const [name, setName] = useState("");
@@ -303,13 +304,12 @@ export default function SignupPage() {
                         className="text-center text-xs text-zinc-600 mt-7"
                     >
                         no account?{" "}
-                        <button
-                            type="button"
-                            onClick={() => navigate("/login")}
+                        <Link
+                            to="/login"
                             className="text-indigo-500 hover:text-indigo-400 transition-colors font-medium"
                         >
                             git init --already have an account →
-                        </button>
+                        </Link>
                     </motion.p>
 
                 </div>

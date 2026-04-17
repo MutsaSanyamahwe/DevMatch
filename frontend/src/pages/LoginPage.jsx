@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { Link } from "react-router-dom";
 
 
 export default function LoginPage() {
@@ -194,9 +195,12 @@ export default function LoginPage() {
 
                     <p className="text-center text-xs text-zinc-600 mt-7">
                         no account?{" "}
-                        <a href="/signup" className="text-indigo-500 hover:text-indigo-400 transition-colors font-medium">
+                        <Link
+                            to="/signup"
+                            className="text-indigo-500 hover:text-indigo-400 transition-colors font-medium"
+                        >
                             git init --new-user →
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </motion.div>
