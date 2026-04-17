@@ -304,7 +304,7 @@ export default function SignupPage() {
                     >
                         no account?{" "}
                         <a
-                            href="/login"
+                            onClick={() => navigate("/login")}
                             className="text-indigo-500 hover:text-indigo-400 transition-colors font-medium"
                         >
                             git init --already have an account →
