@@ -13,7 +13,7 @@ export default function ForgotPassword() {
         setMessage("");
 
         try {
-            const res = await fetch("http://localhost:3000/auth/forgot-password", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/auth/forgot-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
@@ -55,8 +55,8 @@ export default function ForgotPassword() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className={`absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-md text-sm ${type === "error"
-                                    ? "bg-red-600 text-white"
-                                    : "bg-emerald-600 text-white"
+                                ? "bg-red-600 text-white"
+                                : "bg-emerald-600 text-white"
                                 }`}
                         >
                             {message}

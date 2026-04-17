@@ -32,7 +32,7 @@ export default function MessagesPage() {
         if (!userid) return;
         const fetchConvos = async () => {
             try {
-                const res = await fetch(`http://localhost:3000/messages/conversations/${userid}`);
+                const res = await fetch(`https://devmatch-1npz.onrender.com/messages/conversations/${userid}`);
                 const data = await res.json();
                 if (res.ok) {
                     setConversations(data);
@@ -55,7 +55,7 @@ export default function MessagesPage() {
         const fetchMessages = async () => {
             setLoadingMsgs(true);
             try {
-                const res = await fetch(`http://localhost:3000/messages/get-messages/${match_id}`);
+                const res = await fetch(`https://devmatch-1npz.onrender.com/messages/get-messages/${match_id}`);
                 const data = await res.json();
                 if (res.ok) setMessages(data);
             } catch (err) {
@@ -144,7 +144,7 @@ export default function MessagesPage() {
 
     const markRead = async (conversationId) => {
         try {
-            await fetch(`http://localhost:3000/messages/mark-read`, {
+            await fetch(`https://devmatch-1npz.onrender.com/messages/mark-read`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ conversationId, userId: userid }),
@@ -182,7 +182,7 @@ export default function MessagesPage() {
         }
 
         try {
-            const res = await fetch(`http://localhost:3000/messages/send-message`, {
+            const res = await fetch(`https://devmatch-1npz.onrender.com/messages/send-message`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ match_id, sender_id: userid, content: text }),

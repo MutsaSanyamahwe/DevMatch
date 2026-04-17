@@ -331,7 +331,7 @@ export default function OnboardingPage() {
             setGithubSkills(data.github_skills || []);
             setVerified(true);
             if (!userid) throw new Error("No user ID found. Please log in again");
-            const saveRes = await fetch("http://localhost:3000/users/save-cv", {
+            const saveRes = await fetch("https://devmatch-1npz.onrender.com/users/save-cv", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -367,7 +367,7 @@ export default function OnboardingPage() {
                 const fd = new FormData();
                 fd.append("avatar", avatarFile);
                 fd.append("userid", userid);
-                const uploadRes = await fetch("http://localhost:3000/users/upload-avatar", {
+                const uploadRes = await fetch("https://devmatch-1npz.onrender.com/users/upload-avatar", {
                     method: "POST",
                     body: fd,
                 });
@@ -375,7 +375,7 @@ export default function OnboardingPage() {
                 if (!uploadRes.ok) throw new Error(uploadData.message || "Avatar upload failed");
                 avatarUrl = uploadData.avatarUrl;
             }
-            const res = await fetch("http://localhost:3000/users/profile", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/users/profile", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid, username, age, sex, country, city, avatarUrl, devType }),
@@ -392,7 +392,7 @@ export default function OnboardingPage() {
     const saveUserGoals = async () => {
         if (!userid) return;
         try {
-            const res = await fetch("http://localhost:3000/users/save-goals", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/users/save-goals", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid, goals: selectedGoals }),
@@ -407,7 +407,7 @@ export default function OnboardingPage() {
     const saveUserPreferences = async () => {
         if (!userid) return;
         try {
-            const res = await fetch("http://localhost:3000/users/save-preferences", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/users/save-preferences", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid, preferences: prefs }),

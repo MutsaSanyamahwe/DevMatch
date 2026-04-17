@@ -44,9 +44,9 @@ export default function MatchesPage({ onLikeBack, onPass }) {
             setLoading(true);
             try {
                 const [rLiked, rMatched, rYouLiked] = await Promise.all([
-                    fetch(`http://localhost:3000/matches/pending-likes/${userid}`),
-                    fetch(`http://localhost:3000/matches/matches/${userid}`),
-                    fetch(`http://localhost:3000/matches/sent-pending-likes/${userid}`),
+                    fetch(`https://devmatch-1npz.onrender.com/matches/pending-likes/${userid}`),
+                    fetch(`https://devmatch-1npz.onrender.com/matches/matches/${userid}`),
+                    fetch(`https://devmatch-1npz.onrender.com/matches/sent-pending-likes/${userid}`),
                 ]);
                 const [dLiked, dMatched, dYouLiked] = await Promise.all([
                     rLiked.json(),
@@ -96,7 +96,7 @@ export default function MatchesPage({ onLikeBack, onPass }) {
             setCelebration({ show: true, dev });
         }
         try {
-            const res = await fetch(`http://localhost:3000/matches/like-pass`, {
+            const res = await fetch(`https://devmatch-1npz.onrender.com/matches/like-pass`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userid, target_id: targetId, action: "like" }),
@@ -120,7 +120,7 @@ export default function MatchesPage({ onLikeBack, onPass }) {
         // Optimistic
         setLikedYou((prev) => prev.filter((d) => d.userid !== targetId));
         try {
-            const res = await fetch(`http://localhost:3000/matches/like-pass`, {
+            const res = await fetch(`https://devmatch-1npz.onrender.com/matches/like-pass`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userid, target_id: targetId, action: "pass" }),
@@ -137,7 +137,7 @@ export default function MatchesPage({ onLikeBack, onPass }) {
         const dev = youLiked.find((d) => d.userid === targetId);
         setYouLiked((prev) => prev.filter((d) => d.userid !== targetId));
         try {
-            const res = await fetch(`http://localhost:3000/matches/like-pass`, {
+            const res = await fetch(`https://devmatch-1npz.onrender.com/matches/like-pass`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userid, target_id: targetId, action: "pass" }),

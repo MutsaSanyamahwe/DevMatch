@@ -165,19 +165,19 @@ export default function ProfilePage({ navigate }) {
 
         try {
             if (s === "goals") {
-                await axios.post(`http://localhost:3000/users/save-goals`, {
+                await axios.post(`https://devmatch-1npz.onrender.com/users/save-goals`, {
                     userid,
                     goals: draft.goals
                 });
             }
             if (s === "prefs") {
-                await axios.post(`http://localhost:3000/users/save-preferences`, {
+                await axios.post(`https://devmatch-1npz.onrender.com/users/save-preferences`, {
                     userid,
                     preferences: draft.preferences
                 });
             }
             if (s === "personal") {
-                await axios.put(`http://localhost:3000/profile/update-user-info/${userid}`, {
+                await axios.put(`https://devmatch-1npz.onrender.com/profile/update-user-info/${userid}`, {
                     name: draft.firstName,
                     surname: draft.lastName,
                     username: draft.username,
@@ -207,15 +207,15 @@ export default function ProfilePage({ navigate }) {
         const fetchProfile = async () => {
             try {
                 //fetching basic profile
-                const resProfile = await axios.get(`http://localhost:3000/profile/user-info/${userid}`);
+                const resProfile = await axios.get(`https://devmatch-1npz.onrender.com/profile/user-info/${userid}`);
                 const baseProfile = resProfile.data;
 
 
-                const resGoals = await axios.get(`http://localhost:3000/profile/get-user-goals/${userid}`);
+                const resGoals = await axios.get(`https://devmatch-1npz.onrender.com/profile/get-user-goals/${userid}`);
                 const goals = resGoals.data?.goals || [];
 
 
-                const resPrefs = await axios.get(`http://localhost:3000/profile/get-user-preferences/${userid}`);
+                const resPrefs = await axios.get(`https://devmatch-1npz.onrender.com/profile/get-user-preferences/${userid}`);
                 const preferences = resPrefs.data?.preferences || {
                     roles: [],
                     workStyle: [],
@@ -265,7 +265,7 @@ export default function ProfilePage({ navigate }) {
 
         const fetchCvData = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/profile/get-cv-data/${user.userid}`);
+                const res = await axios.get(`https://devmatch-1npz.onrender.com/profile/get-cv-data/${user.userid}`);
                 setCvData(res.data);
             } catch (err) {
                 console.error("Failed to fetch CV data:", err);
@@ -290,7 +290,7 @@ export default function ProfilePage({ navigate }) {
         try {
 
             const res = await axios.post(
-                "http://localhost:3000/users/upload-avatar",
+                "https://devmatch-1npz.onrender.com/users/upload-avatar",
                 formData,
                 {
                     headers: {
@@ -417,7 +417,7 @@ export default function ProfilePage({ navigate }) {
                                     <button
                                         onClick={async () => {
                                             try {
-                                                await axios.post("http://localhost:3000/users/remove-avatar", {
+                                                await axios.post("https://devmatch-1npz.onrender.com/users/remove-avatar", {
                                                     userid: user.userid,
                                                 });
 

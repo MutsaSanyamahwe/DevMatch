@@ -75,7 +75,7 @@ export default function DashboardPage() {
 
             if (!conversationId || !userId) return;
 
-            await axios.post("http://localhost:3000/messages/mark-read", {
+            await axios.post("https://devmatch-1npz.onrender.com/messages/mark-read", {
                 conversationId,
                 userId,
             });
@@ -129,9 +129,9 @@ export default function DashboardPage() {
                 if (!userId) return;
 
                 const [convRes, likeRes, profileRes] = await Promise.all([
-                    fetch(`http://localhost:3000/messages/conversations/${userId}`),
-                    fetch(`http://localhost:3000/matches/pending-likes/${userId}`),
-                    fetch(`http://localhost:3000/profile/user-info/${userId}`),
+                    fetch(`https://devmatch-1npz.onrender.com/messages/conversations/${userId}`),
+                    fetch(`https://devmatch-1npz.onrender.com/matches/pending-likes/${userId}`),
+                    fetch(`https://devmatch-1npz.onrender.com/profile/user-info/${userId}`),
                 ]);
 
                 setConversations(await convRes.json());

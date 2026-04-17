@@ -25,7 +25,7 @@ export default function ResetPasswordPage() {
         setMessage("");
 
         try {
-            const res = await fetch("http://localhost:3000/auth/reset-password", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/auth/reset-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -77,8 +77,8 @@ export default function ResetPasswordPage() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
                             className={`absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-md text-sm ${type === "error"
-                                    ? "bg-red-700 text-white"
-                                    : "bg-emerald-600 text-white"
+                                ? "bg-red-700 text-white"
+                                : "bg-emerald-600 text-white"
                                 }`}
                         >
                             {message}

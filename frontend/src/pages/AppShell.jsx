@@ -46,7 +46,7 @@ export default function AppShell() {
         const fetchProfile = async () => {
             try {
                 setLoadingProfile(true);
-                const res = await fetch(`http://localhost:3000/profile/user-info/${userid}`);
+                const res = await fetch(`https://devmatch-1npz.onrender.com/profile/user-info/${userid}`);
                 const data = await res.json();
                 setProfile(data);
             } finally {

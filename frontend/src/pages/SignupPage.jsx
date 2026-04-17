@@ -29,7 +29,7 @@ export default function SignupPage() {
         setMessage("");
 
         try {
-            const res = await fetch("http://localhost:3000/auth/signup", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
