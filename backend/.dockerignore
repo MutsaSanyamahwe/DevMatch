@@ -1,0 +1,35 @@
+# dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# environment variables (VERY IMPORTANT)
+.env
+.env.*
+
+# git
+.git
+.gitignore
+
+# docker files themselves (optional but common)
+Dockerfile
+.dockerignore
+
+# logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# coverage / testing
+coverage
+
+# build artifacts (if any)
+dist
+build
+
+# IDE/editor
+.vscode
+.idea
