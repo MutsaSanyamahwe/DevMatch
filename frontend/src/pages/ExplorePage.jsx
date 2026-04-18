@@ -30,7 +30,8 @@ const fadeUp = (i = 0) => ({
 
 export default function ExplorePage() {
     return (
-        <div className="h-full flex flex-col bg-zinc-950 text-white">
+        <div className="h-full flex flex-col bg-zinc-950 text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <style>{`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');`}</style>
 
             {/* ───────── HEADER ───────── */}
             <motion.div
@@ -39,30 +40,39 @@ export default function ExplorePage() {
             >
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-[18px] font-extrabold uppercase tracking-widest text-indigo-400">
+                        <span
+                            className="text-[18px] font-semibold uppercase tracking-widest text-indigo-400"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                        >
                             devMatch // explore
                         </span>
                         <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
-                        <span className="text-[18px] text-zinc-600">
+                        <span
+                            className="text-[18px] text-zinc-600"
+                            style={{ fontFamily: "'DM Sans', sans-serif" }}
+                        >
                             ecosystem systems
                         </span>
                     </div>
 
-                    <h1 className="text-3xl font-bold tracking-tight">
+                    <h1
+                        className="text-3xl font-semibold tracking-tight text-white"
+                        style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.03em" }}
+                    >
                         Explore Systems
                     </h1>
 
-                    <p className="text-xs text-zinc-500 mt-2 max-w-md">
+                    <p
+                        className="text-xs text-zinc-500 mt-2 max-w-md"
+                        style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
                         Core intelligence layers powering trust, discovery, and developer matching.
                     </p>
                 </div>
-
-
             </motion.div>
 
             {/* ───────── BODY ───────── */}
             <div className="flex-1 px-8 py-10 space-y-6">
-
                 {systems.map((s, i) => {
                     const Icon = s.icon;
 
@@ -72,23 +82,32 @@ export default function ExplorePage() {
                             {...fadeUp(i + 1)}
                             className="group flex items-center justify-between p-6 rounded-2xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 transition"
                         >
-
                             {/* LEFT */}
                             <div className="flex items-center gap-5">
-
                                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center`}>
                                     <Icon className="w-5 h-5 text-white" />
                                 </div>
 
                                 <div>
                                     <div className="flex items-center gap-3">
-                                        <h2 className="text-lg font-semibold">{s.name}</h2>
-                                        <span className={`text-[10px] px-2 py-0.5 rounded-full border border-zinc-700 ${s.accent}`}>
+                                        <h2
+                                            className="text-lg font-semibold text-white"
+                                            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.03em" }}
+                                        >
+                                            {s.name}
+                                        </h2>
+                                        <span
+                                            className={`text-[10px] px-2 py-0.5 rounded-full border border-zinc-700 ${s.accent}`}
+                                            style={{ fontFamily: "'DM Sans', sans-serif" }}
+                                        >
                                             active
                                         </span>
                                     </div>
 
-                                    <p className="text-xs text-zinc-500 mt-1 max-w-md">
+                                    <p
+                                        className="text-xs text-zinc-500 mt-1 max-w-md"
+                                        style={{ fontFamily: "'DM Sans', sans-serif" }}
+                                    >
                                         {s.description}
                                     </p>
                                 </div>
@@ -100,6 +119,7 @@ export default function ExplorePage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 text-xs px-4 py-2 rounded-lg border border-zinc-700 hover:border-indigo-500 hover:text-indigo-300 transition"
+                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                             >
                                 Open
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -110,11 +130,13 @@ export default function ExplorePage() {
             </div>
 
             {/* ───────── FOOTER ───────── */}
-            <div className="px-8 py-4 border-t border-zinc-800/60 text-[10px] text-zinc-600 flex justify-between">
+            <div
+                className="px-8 py-4 border-t border-zinc-800/60 text-[10px] text-zinc-600 flex justify-between"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
                 <span>devMatch ecosystem</span>
                 <span>trust • intelligence • discovery</span>
             </div>
-
         </div>
     );
 }

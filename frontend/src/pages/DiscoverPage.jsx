@@ -132,17 +132,18 @@ export default function DiscoverPage({ likedIds = new Set(), onLike }) {
                     className="mb-8  mt-12 flex items-start justify-between w-full"
                 >
                     {/* ── Heading ── */}
+
                     <div className="max-w-lg">
-                        <p className="text-[11px] text-indigo-400 tracking-[.15em] uppercase mb-2">
-                        // be the first to connect
+                        <p className="text-[11px] uppercase tracking-widest text-indigo-400 mb-2">
+    // be the first to connect
                         </p>
                         <h1
-                            className="text-[clamp(28px,4vw,42px)] font-black tracking-tight leading-[1.05] mb-3"
-                            style={{ fontFamily: "'Syne', sans-serif" }}
+                            className="text-[clamp(28px,4vw,42px)] font-semibold tracking-tight leading-[1.05] mb-3"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.03em" }}
                         >
                             Discover <span className="text-zinc-600">developers.</span>
                         </h1>
-                        <p className="text-sm text-zinc-600 leading-[1.9]">
+                        <p className="text-sm text-zinc-600 leading-[1.9]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                             These developers haven't liked you yet —{" "}
                             <span className="text-teal-400">be the first to reach out.</span>
                         </p>
@@ -222,14 +223,14 @@ export default function DiscoverPage({ likedIds = new Set(), onLike }) {
 
 // ── Discover card ─────────────────────────────────────────────────────────────
 
+
+
+// ── Discover card ─────────────────────────────────────────────────────────────
 function DiscoverCard({ dev, liked, expanded, onToggleExpand, onLike, onViewProfile }) {
     const hasGoals = dev.goals && dev.goals.length > 0;
 
     return (
         <div className="group bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl overflow-hidden flex flex-col transition-colors flex-1">
-
-            {/* Top accent line */}
-            <div className="h-[2px] w-full bg-gradient-to-r from-indigo-600/60 via-violet-600/40 to-transparent" />
 
             <div className="p-5 flex flex-col gap-3 flex-1">
 
@@ -243,15 +244,17 @@ function DiscoverCard({ dev, liked, expanded, onToggleExpand, onLike, onViewProf
                     />
                     <div className="flex-1 min-w-0">
                         <p
-                            className="text-[14px] font-black text-zinc-100 truncate"
-                            style={{ fontFamily: "'Syne', sans-serif" }}
+                            className="text-[14px] font-semibold text-zinc-100 truncate"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.03em" }}
                         >
                             {dev.username}
                         </p>
-                        <p className="text-[11px] text-indigo-400 font-semibold tracking-wide mt-0.5">
+                        <p className="text-[11px] text-indigo-400 font-medium tracking-widest mt-0.5"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             {dev.devType}
                         </p>
-                        <p className="text-[11px] text-zinc-600 mt-0.5">
+                        <p className="text-[11px] text-zinc-600 mt-0.5"
+                            style={{ fontFamily: "'DM Sans', sans-serif" }}>
                             {[dev.city, dev.country].filter(Boolean).join(", ")}
                         </p>
                     </div>
@@ -275,7 +278,8 @@ function DiscoverCard({ dev, liked, expanded, onToggleExpand, onLike, onViewProf
                             <StackTag key={s} label={s} />
                         ))}
                         {dev.stack.length > 5 && (
-                            <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-500 border border-zinc-700">
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-500 border border-zinc-700"
+                                style={{ fontFamily: "'DM Sans', sans-serif" }}>
                                 +{dev.stack.length - 5}
                             </span>
                         )}
@@ -285,14 +289,16 @@ function DiscoverCard({ dev, liked, expanded, onToggleExpand, onLike, onViewProf
                 {/* ── Goals: "looking for" ── */}
                 {hasGoals && (
                     <div className="bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-3 py-2.5">
-                        <p className="text-[9px] text-indigo-400 tracking-[.15em] uppercase mb-1.5 font-semibold">
-                            // looking for
+                        <p className="text-[9px] text-indigo-400 tracking-widest uppercase mb-1.5 font-semibold"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              // looking for
                         </p>
                         <div className="flex flex-wrap gap-1.5">
                             {dev.goals.slice(0, 3).map((g) => (
                                 <span
                                     key={g}
-                                    className="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 font-semibold"
+                                    className="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 font-medium"
+                                    style={{ fontFamily: "'DM Sans', sans-serif" }}
                                 >
                                     {g}
                                 </span>
@@ -304,37 +310,43 @@ function DiscoverCard({ dev, liked, expanded, onToggleExpand, onLike, onViewProf
                 {/* ── Bio ── */}
                 {dev.bio && (
                     <div>
-                        <p className={`text-[11px] text-zinc-500 leading-[1.8] transition-all ${expanded ? "" : "line-clamp-2"}`}>
+                        <p
+                            className={`text-[11px] text-zinc-500 leading-[1.8] transition-all ${expanded ? "" : "line-clamp-2"
+                                }`}
+                            style={{ fontFamily: "'DM Sans', sans-serif" }}
+                        >
                             {dev.bio}
                         </p>
                         {dev.bio.length > 100 && (
                             <button
                                 onClick={onToggleExpand}
-                                className="text-[10px] text-zinc-600 hover:text-zinc-400 mt-1 tracking-wider transition-colors"
+                                className="text-[10px] text-zinc-600 hover:text-zinc-400 mt-1 tracking-widest transition-colors"
+                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                             >
                                 {expanded ? "show less ↑" : "read more ↓"}
                             </button>
                         )}
                     </div>
                 )}
-
             </div>
 
             {/* ── Footer actions ── */}
             <div className="px-5 pb-5 pt-1 flex gap-2">
                 <button
                     onClick={onViewProfile}
-                    className="flex-1 py-2 text-[11px] font-semibold tracking-widest rounded-lg border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 transition-all"
+                    className="flex-1 py-2 text-[11px] font-semibold tracking-widest rounded-lg border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 transition-colors"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                     ./view-profile
                 </button>
                 <button
                     onClick={onLike}
                     disabled={liked}
-                    className={`flex-1 py-2 text-[11px] font-semibold tracking-widest rounded-lg border transition-all ${liked
-                        ? "bg-emerald-950 border-emerald-800 text-emerald-400 cursor-default"
-                        : "bg-transparent border-indigo-800 text-indigo-400 hover:bg-indigo-950 hover:border-indigo-600 hover:shadow-[0_0_12px_rgba(99,102,241,.2)]"
+                    className={`flex-1 py-2 text-[11px] font-semibold tracking-widest rounded-lg border transition-colors ${liked
+                            ? "bg-emerald-950 border-emerald-800 text-emerald-400 cursor-default"
+                            : "bg-transparent border-indigo-800 text-indigo-400 hover:bg-indigo-950 hover:border-indigo-600"
                         }`}
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                     {liked ? "✓ liked" : "./like"}
                 </button>
