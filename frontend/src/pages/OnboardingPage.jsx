@@ -4,11 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     ChevronRight, SkipForward, MapPin, User,
     Upload, Github, BookOpen, Award, Code, GitFork, Star,
-    Rocket, Handshake, GraduationCap, Briefcase, FlaskConical, Camera, X, Loader2
+    Rocket, Handshake, GraduationCap, Briefcase, FlaskConical, Camera, X, Loader2, Check,
 } from "lucide-react";
 import { useDebounce } from "use-debounce";
 import { useUser } from "../context/UserContext";
-
 
 const steps = ["Profile", "DevVerify", "Goals", "Prefs"];
 
@@ -23,21 +22,28 @@ const goalOptions = [
 
 const DEV_TYPES = [
     "Frontend", "Backend", "Full-Stack Web", "Full-Stack Mobile",
-    "ML / AI", "Data Analytics", "DevOps", "UI/UX Designer", "QA / Testing"
+    "ML / AI", "Data Analytics", "DevOps", "UI/UX Designer", "QA / Testing",
 ];
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
-    exit: { opacity: 0, y: -12, transition: { duration: 0.25 } },
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.22 } },
 };
 
 const slideDown = {
     hidden: { opacity: 0, height: 0, marginTop: 0 },
     show: { opacity: 1, height: "auto", marginTop: 16, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
-    exit: { opacity: 0, height: 0, marginTop: 0, transition: { duration: 0.25 } },
+    exit: { opacity: 0, height: 0, marginTop: 0, transition: { duration: 0.22 } },
 };
 
+const STEP_LOADING_LABEL = {
+    0: "Saving profile...",
+    2: "Saving goals...",
+    3: "Saving preferences...",
+};
+
+/* ── Shared field wrapper ── */
 function Field({ label, children }) {
     return (
         <div className="space-y-1.5">
@@ -47,36 +53,32 @@ function Field({ label, children }) {
     );
 }
 
-function TextInput({ icon: Icon, suffix, ...props }) {
+/* ── Text input ── */
+function TextInput({ icon: Icon, ...props }) {
     return (
         <div className="relative">
             {Icon && (
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none">
-                    <Icon className="w-3.5 h-3.5" />
+                    <Icon className="w-3.5 h-3.5" strokeWidth={1.5} />
                 </span>
             )}
             <input
                 {...props}
-                className={`w-full bg-zinc-950 border border-zinc-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 rounded-lg py-3 text-sm text-zinc-200 placeholder-zinc-700 outline-none transition-all caret-indigo-500 ${Icon ? "pl-9" : "pl-4"} ${suffix ? "pr-10" : "pr-4"}`}
+                className={`w-full bg-zinc-950 border border-zinc-800 focus:border-indigo-700 outline-none rounded-xl py-3 text-sm text-zinc-200 placeholder-zinc-700 transition-all caret-indigo-400 ${Icon ? "pl-9" : "pl-4"} pr-4`}
             />
-            {suffix && (
-                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                    {suffix}
-                </span>
-            )}
         </div>
     );
 }
 
+/* ── GitHub status dot ── */
 function GithubStatus({ checking, valid, error }) {
-    if (checking) return (
-        <span className="w-3.5 h-3.5 border-2 border-zinc-600 border-t-indigo-400 rounded-full animate-spin" />
-    );
-    if (valid) return <span className="text-emerald-400 text-xs font-bold">✓</span>;
-    if (error) return <span className="text-red-400 text-xs font-bold">✗</span>;
+    if (checking) return <span className="w-3 h-3 border-2 border-zinc-700 border-t-indigo-400 rounded-full animate-spin" />;
+    if (valid) return <span className="w-2 h-2 rounded-full bg-emerald-400" />;
+    if (error) return <span className="w-2 h-2 rounded-full bg-red-400" />;
     return null;
 }
 
+/* ── Verify preview ── */
 function VerifyPreview({ cvInfo, repos, skills }) {
     const [reposExpanded, setReposExpanded] = useState(false);
     const topRepos = reposExpanded ? repos : repos.slice(0, 3);
@@ -84,9 +86,9 @@ function VerifyPreview({ cvInfo, repos, skills }) {
     const hasCerts = cvInfo.certifications?.length > 0;
 
     return (
-        <motion.div variants={slideDown} initial="hidden" animate="show" exit="exit" className="overflow-hidden">
-            <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/60 rounded-xl px-4 py-3 mb-4">
-                <span className="text-emerald-400 text-base">✓</span>
+        <motion.div variants={slideDown} initial="hidden" animate="show" exit="exit" className="overflow-hidden space-y-3">
+            <div className="flex items-center gap-2.5 bg-emerald-950/40 border border-emerald-900 rounded-xl px-4 py-3">
+                <Check className="w-4 h-4 text-emerald-400 shrink-0" strokeWidth={1.5} />
                 <div>
                     <p className="text-xs font-semibold text-emerald-400">Profile analyzed successfully</p>
                     <p className="text-[10px] text-zinc-500 mt-0.5">Review what we extracted — this will pre-fill your profile</p>
@@ -94,15 +96,15 @@ function VerifyPreview({ cvInfo, repos, skills }) {
             </div>
 
             {skills?.length > 0 && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-3">
+                <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4">
                     <div className="flex items-center gap-2 mb-3">
-                        <Code className="w-3.5 h-3.5 text-indigo-400" />
-                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Skills extracted</span>
+                        <Code className="w-3.5 h-3.5 text-indigo-400" strokeWidth={1.5} />
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Skills extracted</span>
                         <span className="ml-auto text-[10px] text-zinc-600">{skills.length} found</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                         {skills.map((skill) => (
-                            <span key={skill} className="bg-indigo-950 border border-indigo-800/60 text-indigo-300 text-[10px] px-2 py-0.5 rounded-md">
+                            <span key={skill} className="bg-indigo-950/60 border border-indigo-900 text-indigo-300 text-[10px] px-2 py-0.5 rounded-md">
                                 {skill}
                             </span>
                         ))}
@@ -111,27 +113,28 @@ function VerifyPreview({ cvInfo, repos, skills }) {
             )}
 
             {repos?.length > 0 && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-3">
+                <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4">
                     <div className="flex items-center gap-2 mb-3">
-                        <GitFork className="w-3.5 h-3.5 text-teal-400" />
-                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Public repos</span>
+                        <GitFork className="w-3.5 h-3.5 text-teal-400" strokeWidth={1.5} />
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Public repos</span>
                         <span className="ml-auto text-[10px] text-zinc-600">{repos.length} found</span>
                     </div>
                     <div className="space-y-2">
                         {topRepos.map((repo) => (
                             <div key={repo.name} className="flex items-start justify-between gap-3 bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2.5">
                                 <div className="min-w-0">
-                                    <p className="text-xs font-medium text-zinc-200 truncate">{repo.name}</p>
+                                    <p className="text-xs font-medium text-zinc-200 truncate"
+                                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{repo.name}</p>
                                     {repo.description && <p className="text-[10px] text-zinc-600 truncate mt-0.5">{repo.description}</p>}
                                     <div className="flex items-center gap-3 mt-1.5">
                                         {repo.language && <span className="text-[10px] text-sky-400">{repo.language}</span>}
                                         {repo.stars > 0 && (
-                                            <span className="flex items-center gap-0.5 text-[10px] text-zinc-500">
+                                            <span className="flex items-center gap-0.5 text-[10px] text-zinc-600">
                                                 <Star className="w-2.5 h-2.5" /> {repo.stars}
                                             </span>
                                         )}
                                         {repo.forks > 0 && (
-                                            <span className="flex items-center gap-0.5 text-[10px] text-zinc-500">
+                                            <span className="flex items-center gap-0.5 text-[10px] text-zinc-600">
                                                 <GitFork className="w-2.5 h-2.5" /> {repo.forks}
                                             </span>
                                         )}
@@ -139,7 +142,7 @@ function VerifyPreview({ cvInfo, repos, skills }) {
                                 </div>
                                 {repo.url && (
                                     <a href={repo.url} target="_blank" rel="noreferrer"
-                                        className="text-[10px] text-indigo-500 hover:text-indigo-400 flex-shrink-0 mt-0.5 transition-colors">
+                                        className="text-[10px] text-indigo-400 hover:text-indigo-300 flex-shrink-0 mt-0.5 transition-colors">
                                         view →
                                     </a>
                                 )}
@@ -147,19 +150,19 @@ function VerifyPreview({ cvInfo, repos, skills }) {
                         ))}
                     </div>
                     {repos.length > 3 && (
-                        <button onClick={() => setReposExpanded((v) => !v)}
+                        <button onClick={() => setReposExpanded(v => !v)}
                             className="mt-2 w-full text-[10px] text-zinc-600 hover:text-zinc-400 transition-colors py-1">
-                            {reposExpanded ? "show less ↑" : `show ${repos.length - 3} more repos ↓`}
+                            {reposExpanded ? "show less ↑" : `show ${repos.length - 3} more ↓`}
                         </button>
                     )}
                 </div>
             )}
 
             {hasDegrees && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-3">
+                <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4">
                     <div className="flex items-center gap-2 mb-3">
-                        <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Education</span>
+                        <BookOpen className="w-3.5 h-3.5 text-amber-400" strokeWidth={1.5} />
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Education</span>
                     </div>
                     <div className="space-y-2">
                         {cvInfo.degrees.map((deg, i) => (
@@ -174,10 +177,10 @@ function VerifyPreview({ cvInfo, repos, skills }) {
             )}
 
             {hasCerts && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-3">
+                <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4">
                     <div className="flex items-center gap-2 mb-3">
-                        <Award className="w-3.5 h-3.5 text-violet-400" />
-                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Certifications</span>
+                        <Award className="w-3.5 h-3.5 text-violet-400" strokeWidth={1.5} />
+                        <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Certifications</span>
                     </div>
                     <div className="space-y-2">
                         {cvInfo.certifications.map((cert, i) => (
@@ -192,7 +195,7 @@ function VerifyPreview({ cvInfo, repos, skills }) {
             )}
 
             {!skills?.length && !repos?.length && !hasDegrees && !hasCerts && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-5 text-center">
+                <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl px-4 py-5 text-center">
                     <p className="text-xs text-zinc-500">
                         We couldn't extract much this time — you can add details manually in your profile.
                     </p>
@@ -202,25 +205,17 @@ function VerifyPreview({ cvInfo, repos, skills }) {
     );
 }
 
-// ── Loading label per step ─────────────────────────────────────────────────
-const STEP_LOADING_LABEL = {
-    0: "saving profile...",
-    2: "saving goals...",
-    3: "saving prefs...",
-};
-
+/* ── Main ── */
 export default function OnboardingPage() {
     const { user } = useUser();
-    const location = useLocation();
     const navigate = useNavigate();
     const { userid, is_setup, step_skills, step_goals, step_prefs } = user;
 
     const [step, setStep] = useState(0);
-    // Tracks the highest step the user has completed and advanced past
     const [completedUpTo, setCompletedUpTo] = useState(-1);
     const [advancing, setAdvancing] = useState(false);
 
-    // ── Step 0: Profile ──
+    // Step 0 — Profile
     const [avatarFile, setAvatarFile] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(null);
     const avatarInputRef = useRef(null);
@@ -231,10 +226,10 @@ export default function OnboardingPage() {
     const [city, setCity] = useState("");
     const [devType, setDevType] = useState("");
 
-    // ── Step 1: DevVerify ──
+    // Step 1 — DevVerify
     const [cvFile, setCvFile] = useState(null);
     const [githubUsername, setGithubUsername] = useState("");
-    const [debouncedGithubUsername] = useDebounce(githubUsername, 600);
+    const [debouncedGithub] = useDebounce(githubUsername, 600);
     const [githubChecking, setGithubChecking] = useState(false);
     const [githubValid, setGithubValid] = useState(false);
     const [verifying, setVerifying] = useState(false);
@@ -244,14 +239,12 @@ export default function OnboardingPage() {
     const [userRepos, setUserRepos] = useState([]);
     const [githubSkills, setGithubSkills] = useState([]);
 
-    // ── Step 2: Goals ──
+    // Step 2 — Goals
     const [selectedGoals, setGoals] = useState([]);
 
-    // ── Step 3: Prefs ──
-    const [prefs, setPrefs] = useState({
-        workStyle: "", availability: "", timezone: "", commitment: "",
-    });
-    const setPref = (key, val) => setPrefs((p) => ({ ...p, [key]: val }));
+    // Step 3 — Prefs
+    const [prefs, setPrefs] = useState({ workStyle: "", availability: "", timezone: "", commitment: "" });
+    const setPref = (key, val) => setPrefs(p => ({ ...p, [key]: val }));
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -267,84 +260,61 @@ export default function OnboardingPage() {
         if (avatarInputRef.current) avatarInputRef.current.value = "";
     };
 
+    /* GitHub validation */
     useEffect(() => {
-        if (!debouncedGithubUsername.trim()) {
-            setGithubValid(false);
-            setGithubChecking(false);
-            setVerifyError("");
-            return;
+        if (!debouncedGithub.trim()) {
+            setGithubValid(false); setGithubChecking(false); setVerifyError(""); return;
         }
         const validate = async () => {
-            setGithubChecking(true);
-            setGithubValid(false);
-            setVerifyError("");
+            setGithubChecking(true); setGithubValid(false); setVerifyError("");
             try {
-                const res = await fetch(`https://api.github.com/users/${debouncedGithubUsername}`);
-                if (!res.ok) {
-                    setGithubValid(false);
-                    setVerifyError("GitHub username not found — double check and try again.");
-                } else {
-                    setGithubValid(true);
-                    setVerifyError("");
-                }
+                const res = await fetch(`https://api.github.com/users/${debouncedGithub}`);
+                if (!res.ok) { setGithubValid(false); setVerifyError("GitHub username not found."); }
+                else { setGithubValid(true); setVerifyError(""); }
             } catch {
-                setGithubValid(false);
-                setVerifyError("Could not reach GitHub. Check your connection.");
+                setGithubValid(false); setVerifyError("Could not reach GitHub. Check your connection.");
             } finally {
                 setGithubChecking(false);
             }
         };
         validate();
-    }, [debouncedGithubUsername]);
+    }, [debouncedGithub]);
 
     useEffect(() => {
-        if (githubUsername.trim() && githubUsername !== debouncedGithubUsername) {
-            setGithubChecking(true);
-            setGithubValid(false);
+        if (githubUsername.trim() && githubUsername !== debouncedGithub) {
+            setGithubChecking(true); setGithubValid(false);
         }
-    }, [githubUsername, debouncedGithubUsername]);
+    }, [githubUsername, debouncedGithub]);
 
     const toggleGoal = (title) =>
-        setGoals((prev) =>
-            prev.includes(title) ? prev.filter((g) => g !== title) : [...prev, title]
-        );
+        setGoals(prev => prev.includes(title) ? prev.filter(g => g !== title) : [...prev, title]);
+
+    const resetVerify = () => {
+        setVerified(false);
+        setCvInfo({ certifications: [], degrees: [] });
+        setUserRepos([]); setGithubSkills([]);
+    };
 
     const handleVerify = async () => {
         if (!githubUsername || !cvFile || !githubValid) return;
-        setVerifying(true);
-        setVerifyError("");
+        setVerifying(true); setVerifyError("");
         try {
             const formData = new FormData();
             formData.append("cv_file", cvFile);
             formData.append("github_username", githubUsername);
-            const res = await fetch("https://devverify-system.onrender.com/analyze", {
-                method: "POST",
-                body: formData,
-            });
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.error || "Verification failed");
-            }
+            const res = await fetch("https://devverify-system.onrender.com/analyze", { method: "POST", body: formData });
+            if (!res.ok) { const e = await res.json(); throw new Error(e.error || "Verification failed"); }
             const data = await res.json();
             setCvInfo(data.cv_info || { certifications: [], degrees: [] });
             setUserRepos(data.github_repos || []);
             setGithubSkills(data.github_skills || []);
             setVerified(true);
-            if (!userid) throw new Error("No user ID found. Please log in again");
+            if (!userid) throw new Error("No user ID found.");
             const saveRes = await fetch("https://devmatch-1npz.onrender.com/users/save-cv", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    userid,
-                    cv_info: data.cv_info || { certifications: [], degrees: [] },
-                    github_skills: data.github_skills || [],
-                    github_data: data.github_data || []
-                })
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid, cv_info: data.cv_info || { certifications: [], degrees: [] }, github_skills: data.github_skills || [], github_data: data.github_data || [] }),
             });
-            if (!saveRes.ok) {
-                const errData = await saveRes.json();
-                throw new Error(errData.error || "Failed to save CV data to DB");
-            }
+            if (!saveRes.ok) { const e = await saveRes.json(); throw new Error(e.error || "Failed to save CV data"); }
         } catch (err) {
             setVerifyError(err.message || "Something went wrong. Please try again.");
         } finally {
@@ -352,85 +322,49 @@ export default function OnboardingPage() {
         }
     };
 
-    const resetVerify = () => {
-        setVerified(false);
-        setCvInfo({ certifications: [], degrees: [] });
-        setUserRepos([]);
-        setGithubSkills([]);
-    };
-
     const handleProfileSubmit = async () => {
-        if (!userid) { console.error("No user ID found"); return false; }
+        if (!userid) return false;
         try {
             let avatarUrl = null;
             if (avatarFile) {
                 const fd = new FormData();
-                fd.append("avatar", avatarFile);
-                fd.append("userid", userid);
-                const uploadRes = await fetch("https://devmatch-1npz.onrender.com/users/upload-avatar", {
-                    method: "POST",
-                    body: fd,
-                });
+                fd.append("avatar", avatarFile); fd.append("userid", userid);
+                const uploadRes = await fetch("https://devmatch-1npz.onrender.com/users/upload-avatar", { method: "POST", body: fd });
                 const uploadData = await uploadRes.json();
                 if (!uploadRes.ok) throw new Error(uploadData.message || "Avatar upload failed");
                 avatarUrl = uploadData.avatarUrl;
             }
             const res = await fetch("https://devmatch-1npz.onrender.com/users/profile", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+                method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid, username, age, sex, country, city, avatarUrl, devType }),
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Profile update failed");
+            if (!res.ok) { const d = await res.json(); throw new Error(d.message || "Profile update failed"); }
             return true;
-        } catch (err) {
-            console.error("Error updating profile:", err);
-            return false;
-        }
+        } catch (err) { console.error(err); return false; }
     };
 
     const saveUserGoals = async () => {
         if (!userid) return;
-        try {
-            const res = await fetch("https://devmatch-1npz.onrender.com/users/save-goals", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userid, goals: selectedGoals }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed to save goals");
-        } catch (err) {
-            console.error("Error saving user goals:", err);
-        }
+        await fetch("https://devmatch-1npz.onrender.com/users/save-goals", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userid, goals: selectedGoals }),
+        });
     };
 
     const saveUserPreferences = async () => {
         if (!userid) return;
-        try {
-            const res = await fetch("https://devmatch-1npz.onrender.com/users/save-preferences", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userid, preferences: prefs }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed to save preferences");
-        } catch (err) {
-            console.error("Error saving user preferences:", err);
-        }
+        await fetch("https://devmatch-1npz.onrender.com/users/save-preferences", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userid, preferences: prefs }),
+        });
     };
 
     useEffect(() => {
-        if (is_setup && step_skills && step_goals && step_prefs) {
-            navigate("/dashboard");
-        } else if (is_setup && step_skills && step_goals) {
-            setStep(3); setCompletedUpTo(2);
-        } else if (is_setup && step_skills) {
-            setStep(2); setCompletedUpTo(1);
-        } else if (is_setup) {
-            setStep(1); setCompletedUpTo(0);
-        } else {
-            setStep(0);
-        }
+        if (is_setup && step_skills && step_goals && step_prefs) navigate("/dashboard");
+        else if (is_setup && step_skills && step_goals) { setStep(3); setCompletedUpTo(2); }
+        else if (is_setup && step_skills) { setStep(2); setCompletedUpTo(1); }
+        else if (is_setup) { setStep(1); setCompletedUpTo(0); }
+        else setStep(0);
     }, [userid, is_setup, step_skills, step_goals, step_prefs, navigate]);
 
     const canAdvance = () => {
@@ -444,115 +378,110 @@ export default function OnboardingPage() {
         if (!canAdvance() || advancing) return;
         setAdvancing(true);
         try {
-            if (step === 0) {
-                const ok = await handleProfileSubmit();
-                if (!ok) return;
-            }
+            if (step === 0) { const ok = await handleProfileSubmit(); if (!ok) return; }
             if (step === 2) await saveUserGoals();
             if (step === 3) await saveUserPreferences();
-
-            setCompletedUpTo((prev) => Math.max(prev, step));
-
-            if (step < steps.length - 1) setStep((s) => s + 1);
+            setCompletedUpTo(prev => Math.max(prev, step));
+            if (step < steps.length - 1) setStep(s => s + 1);
             else window.location.href = "/dashboard";
         } finally {
             setAdvancing(false);
         }
     };
 
-    // A step is locked if the user has already completed and advanced past it
     const isStepLocked = (targetStep) => targetStep <= completedUpTo;
 
-    const nextLabel = () => {
-        if (advancing) return STEP_LOADING_LABEL[step] ?? "saving...";
-        if (step < steps.length - 1) return "next";
-        return "go to dashboard";
-    };
-
     return (
-        <div className="min-h-full bg-[#0f0f11] flex items-center justify-center p-6 md:p-10">
-            <div
-                className="fixed inset-0 pointer-events-none"
-                style={{
-                    backgroundImage:
-                        "linear-gradient(rgba(99,102,241,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.03) 1px,transparent 1px)",
-                    backgroundSize: "60px 60px",
-                }}
-            />
+        <div
+            className="min-h-screen bg-zinc-950 flex items-center justify-center p-6 md:p-10"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+        >
+            <style>{`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');`}</style>
 
-            <div className="relative z-10 w-full max-w-lg font-mono">
+            {/* Subtle grid */}
+            <div className="fixed inset-0 pointer-events-none opacity-40" style={{
+                backgroundImage: "linear-gradient(#18181b 1px,transparent 1px),linear-gradient(90deg,#18181b 1px,transparent 1px)",
+                backgroundSize: "48px 48px",
+            }} />
 
+            <div className="relative z-10 w-full max-w-lg">
+
+                {/* Logo */}
                 <motion.div
-                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45 }}
                     className="text-center mb-8"
                 >
-                    <h1 className="text-3xl font-black tracking-tight text-zinc-50 mb-2"
-                        style={{ fontFamily: "'Syne', sans-serif" }}>
+                    <h1 className="text-3xl font-bold tracking-tight text-zinc-50 mb-1.5"
+                        style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.04em" }}>
                         dev<span className="text-indigo-500">match</span>
                     </h1>
-                    <p className="text-xs text-zinc-600 tracking-widest">// let's build your profile</p>
+                    <p className="text-[11px] text-zinc-600 tracking-widest uppercase">// let's build your profile</p>
                 </motion.div>
 
-                {/* Progress */}
+                {/* Step progress */}
                 <div className="flex items-center justify-center mb-10">
                     {steps.map((label, i) => (
                         <div key={label} className="flex items-center">
                             <div className="flex flex-col items-center gap-1.5">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-all duration-300 ${i < step ? "bg-indigo-600 border-indigo-600 text-white"
-                                    : i === step ? "border-indigo-500 text-indigo-400"
-                                        : "border-zinc-800 text-zinc-600"
-                                    }`}>
-                                    {i < step ? "✓" : i + 1}
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-all duration-300 ${i < step ? "bg-indigo-600 border-indigo-600 text-white" :
+                                        i === step ? "border-indigo-600 text-indigo-400" :
+                                            "border-zinc-800 text-zinc-700"
+                                    }`}
+                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                    {i < step ? <Check className="w-3.5 h-3.5" strokeWidth={2.5} /> : i + 1}
                                 </div>
                                 <span className={`text-[10px] tracking-wider whitespace-nowrap ${i === step ? "text-indigo-400" : "text-zinc-700"}`}>
                                     {label}
                                 </span>
                             </div>
                             {i < steps.length - 1 && (
-                                <div className={`w-10 h-0.5 mx-2 mb-5 rounded transition-all duration-300 ${i < step ? "bg-indigo-600" : "bg-zinc-800"}`} />
+                                <div className={`w-10 h-px mx-2 mb-5 rounded transition-all duration-300 ${i < step ? "bg-indigo-600" : "bg-zinc-800"}`} />
                             )}
                         </div>
                     ))}
                 </div>
 
-                {/* Content — unchanged */}
+                {/* Step content */}
                 <AnimatePresence mode="wait">
 
+                    {/* STEP 0 — Profile */}
                     {step === 0 && (
-                        <motion.div key="profile" variants={fadeUp} initial="hidden" animate="show" exit="exit"
-                            className="space-y-4">
+                        <motion.div key="profile" variants={fadeUp} initial="hidden" animate="show" exit="exit" className="space-y-4">
                             <p className="text-[11px] text-indigo-400 uppercase tracking-[.15em] text-center mb-6">
                                 // tell us about yourself
                             </p>
+
+                            {/* Avatar */}
                             <div className="flex flex-col items-center mb-2">
                                 <div className="relative group">
                                     <div
                                         onClick={() => avatarInputRef.current?.click()}
-                                        className={`w-20 h-20 rounded-full border-2 border-dashed flex items-center justify-center cursor-pointer transition-all overflow-hidden ${avatarPreview ? "border-indigo-600" : "border-zinc-700 hover:border-zinc-500 bg-zinc-900"}`}
+                                        className={`w-20 h-20 rounded-full border-2 border-dashed flex items-center justify-center cursor-pointer transition-all overflow-hidden ${avatarPreview ? "border-indigo-700" : "border-zinc-800 hover:border-zinc-600 bg-zinc-900"
+                                            }`}
                                     >
                                         {avatarPreview ? (
                                             <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="flex flex-col items-center gap-1 text-zinc-600 group-hover:text-zinc-400 transition-colors">
-                                                <Camera className="w-5 h-5" />
+                                                <Camera className="w-5 h-5" strokeWidth={1.5} />
                                                 <span className="text-[9px] tracking-wider">photo</span>
                                             </div>
                                         )}
                                     </div>
                                     {avatarPreview && (
                                         <button onClick={removeAvatar}
-                                            className="absolute -top-1 -right-1 w-5 h-5 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center hover:bg-red-950 hover:border-red-800 transition-all">
-                                            <X className="w-2.5 h-2.5 text-zinc-400" />
+                                            className="absolute -top-1 -right-1 w-5 h-5 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center hover:bg-red-950 hover:border-red-900 transition-all">
+                                            <X className="w-2.5 h-2.5 text-zinc-400" strokeWidth={1.5} />
                                         </button>
                                     )}
                                 </div>
-                                <input ref={avatarInputRef} type="file" accept="image/png,image/jpeg,image/webp"
-                                    onChange={handleAvatarChange} className="hidden" />
+                                <input ref={avatarInputRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={handleAvatarChange} className="hidden" />
                                 <p className="text-[10px] text-zinc-700 mt-2">
                                     {avatarPreview ? "click photo to change" : "optional profile photo"}
                                 </p>
                             </div>
+
                             <Field label="Display name">
                                 <TextInput icon={User} type="text" placeholder="how you'll appear on your profile"
                                     value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -564,7 +493,7 @@ export default function OnboardingPage() {
                                 </Field>
                                 <Field label="Sex">
                                     <select value={sex} onChange={(e) => setSex(e.target.value)}
-                                        className="w-full bg-zinc-950 border border-zinc-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 rounded-lg px-4 py-3 text-sm text-zinc-200 outline-none transition-all appearance-none cursor-pointer"
+                                        className="w-full bg-zinc-950 border border-zinc-800 focus:border-indigo-700 rounded-xl px-4 py-3 text-sm text-zinc-200 outline-none transition-all appearance-none cursor-pointer"
                                         style={{ colorScheme: "dark" }}>
                                         <option value="" disabled>select...</option>
                                         <option value="male">Male</option>
@@ -586,9 +515,10 @@ export default function OnboardingPage() {
                                 <div className="flex flex-wrap gap-2">
                                     {DEV_TYPES.map((type) => (
                                         <button key={type} type="button" onClick={() => setDevType(type)}
-                                            className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all ${devType === type
-                                                ? "bg-indigo-600 text-white border border-indigo-500"
-                                                : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700 hover:text-zinc-200"}`}>
+                                            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all border ${devType === type
+                                                    ? "bg-indigo-600 text-white border-indigo-600"
+                                                    : "bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-zinc-200"
+                                                }`}>
                                             {type}
                                         </button>
                                     ))}
@@ -600,17 +530,20 @@ export default function OnboardingPage() {
                         </motion.div>
                     )}
 
+                    {/* STEP 1 — DevVerify */}
                     {step === 1 && (
-                        <motion.div key="devverify" variants={fadeUp} initial="hidden" animate="show" exit="exit"
-                            className="space-y-4">
+                        <motion.div key="devverify" variants={fadeUp} initial="hidden" animate="show" exit="exit" className="space-y-4">
                             <p className="text-[11px] text-indigo-400 uppercase tracking-[.15em] text-center mb-6">
                                 // verify your dev profile
                             </p>
-                            <div className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all ${cvFile ? "border-indigo-600 bg-indigo-950/20" : "border-zinc-800 hover:border-zinc-700 bg-zinc-900/50"}`}>
+
+                            {/* CV drop zone */}
+                            <div className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all ${cvFile ? "border-indigo-800 bg-indigo-950/20" : "border-zinc-800 hover:border-zinc-700 bg-zinc-900/40"
+                                }`}>
                                 <input type="file" accept=".pdf,.doc,.docx"
                                     onChange={(e) => { setCvFile(e.target.files[0]); resetVerify(); }}
                                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
-                                <Upload className={`w-6 h-6 mx-auto mb-2 ${cvFile ? "text-indigo-400" : "text-zinc-600"}`} />
+                                <Upload className={`w-5 h-5 mx-auto mb-2 ${cvFile ? "text-indigo-400" : "text-zinc-600"}`} strokeWidth={1.5} />
                                 {cvFile ? (
                                     <>
                                         <p className="text-xs font-medium text-indigo-400 mb-0.5">CV uploaded</p>
@@ -618,56 +551,54 @@ export default function OnboardingPage() {
                                     </>
                                 ) : (
                                     <>
-                                        <p className="text-xs text-zinc-400 mb-0.5">drop your CV here or click to browse</p>
+                                        <p className="text-sm text-zinc-400 mb-0.5">Drop your CV here or click to browse</p>
                                         <p className="text-[10px] text-zinc-700">PDF, DOC or DOCX</p>
                                     </>
                                 )}
                             </div>
+
+                            {/* GitHub input */}
                             <Field label="GitHub username">
                                 <div className="relative">
                                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                                        <Github className="w-3.5 h-3.5 text-zinc-600" />
+                                        <Github className="w-3.5 h-3.5 text-zinc-600" strokeWidth={1.5} />
                                     </span>
                                     <input type="text" placeholder="your-github-handle" value={githubUsername}
-                                        onChange={(e) => {
-                                            setGithubUsername(e.target.value);
-                                            setVerified(false);
-                                            resetVerify();
-                                            if (e.target.value.trim()) setGithubChecking(true);
-                                            else { setGithubChecking(false); setGithubValid(false); }
-                                        }}
-                                        className={`w-full bg-zinc-950 border rounded-lg py-3 pl-9 pr-10 text-sm text-zinc-200 placeholder-zinc-700 outline-none transition-all caret-indigo-500 focus:ring-2 focus:ring-indigo-500/10 ${githubValid ? "border-emerald-700 focus:border-emerald-600"
-                                            : verifyError && githubUsername ? "border-red-800 focus:border-red-700"
-                                                : "border-zinc-800 focus:border-indigo-500"}`} />
+                                        onChange={(e) => { setGithubUsername(e.target.value); setVerified(false); resetVerify(); if (e.target.value.trim()) setGithubChecking(true); else { setGithubChecking(false); setGithubValid(false); } }}
+                                        className={`w-full bg-zinc-950 border rounded-xl py-3 pl-9 pr-10 text-sm text-zinc-200 placeholder-zinc-700 outline-none transition-all caret-indigo-400 ${githubValid ? "border-emerald-800 focus:border-emerald-700" :
+                                                verifyError && githubUsername ? "border-red-900 focus:border-red-800" :
+                                                    "border-zinc-800 focus:border-indigo-700"
+                                            }`} />
                                     <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center">
-                                        <GithubStatus checking={githubChecking} valid={githubValid}
-                                            error={!githubChecking && !githubValid && !!verifyError && !!githubUsername} />
+                                        <GithubStatus checking={githubChecking} valid={githubValid} error={!githubChecking && !githubValid && !!verifyError && !!githubUsername} />
                                     </span>
                                 </div>
                                 <AnimatePresence>
                                     {githubValid && !verifyError && (
                                         <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                                             className="text-[10px] text-emerald-500 mt-1.5">
-                                            ✓ @{githubUsername} found on GitHub
+                                            @{githubUsername} found on GitHub
                                         </motion.p>
                                     )}
                                 </AnimatePresence>
                             </Field>
+
                             <AnimatePresence>
                                 {verifyError && (
                                     <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                                        className="bg-red-950/40 border border-red-800/60 rounded-lg px-4 py-3">
+                                        className="bg-red-950/40 border border-red-900 rounded-xl px-4 py-3">
                                         <p className="text-xs text-red-400">{verifyError}</p>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
+
                             {!verified ? (
                                 <button onClick={handleVerify}
                                     disabled={!cvFile || !githubValid || verifying || githubChecking}
-                                    className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold tracking-wider py-3 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(99,102,241,.35)]">
+                                    className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold py-3 rounded-xl transition-all">
                                     {verifying ? (
-                                        <><span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> analyzing repos...</>
-                                    ) : "analyze my profile →"}
+                                        <><Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.5} /> Analyzing repos...</>
+                                    ) : "Analyze my profile →"}
                                 </button>
                             ) : (
                                 <button onClick={resetVerify}
@@ -675,22 +606,25 @@ export default function OnboardingPage() {
                                     re-upload and re-analyze ↺
                                 </button>
                             )}
+
                             <AnimatePresence>
                                 {verified && <VerifyPreview cvInfo={cvInfo} repos={userRepos} skills={githubSkills} />}
                             </AnimatePresence>
+
                             <p className="text-[10px] text-zinc-700 text-center">
                                 CV + GitHub help us auto-fill your skills and boost match accuracy
                             </p>
                         </motion.div>
                     )}
 
+                    {/* STEP 2 — Goals */}
                     {step === 2 && (
                         <motion.div key="goals" variants={fadeUp} initial="hidden" animate="show" exit="exit">
                             <p className="text-[11px] text-indigo-400 uppercase tracking-[.15em] text-center mb-1">
                                 // what are you looking for?
                             </p>
                             <p className="text-[10px] text-zinc-600 text-center mb-6">
-                                select all that apply — you can always change this later
+                                select all that apply — you can change this later
                             </p>
                             <div className="grid grid-cols-2 gap-3 mb-3">
                                 {goalOptions.map(({ icon: Icon, title, desc }) => {
@@ -698,18 +632,18 @@ export default function OnboardingPage() {
                                     return (
                                         <button key={title} onClick={() => toggleGoal(title)}
                                             className={`relative text-left p-4 rounded-xl border transition-all ${selected
-                                                ? "border-indigo-500 bg-indigo-950 ring-1 ring-indigo-500/30"
-                                                : "border-zinc-800 bg-zinc-900 hover:border-zinc-700"}`}>
+                                                    ? "border-indigo-800 bg-indigo-950/50"
+                                                    : "border-zinc-800 bg-zinc-900/40 hover:border-zinc-700"
+                                                }`}>
                                             {selected && (
                                                 <span className="absolute top-3 right-3 w-4 h-4 rounded-full bg-indigo-600 flex items-center justify-center">
-                                                    <span className="text-[9px] text-white font-bold">✓</span>
+                                                    <Check className="w-2.5 h-2.5 text-white" strokeWidth={2.5} />
                                                 </span>
                                             )}
-                                            <div className="mb-2">
-                                                <Icon className={`w-5 h-5 ${selected ? "text-indigo-400" : "text-zinc-600"}`} />
-                                            </div>
-                                            <div className="text-xs font-semibold text-zinc-100 mb-1">{title}</div>
-                                            <div className="text-[10px] text-zinc-600 leading-relaxed">{desc}</div>
+                                            <Icon className={`w-4 h-4 mb-2 ${selected ? "text-indigo-400" : "text-zinc-600"}`} strokeWidth={1.5} />
+                                            <div className="text-sm font-semibold text-zinc-100 mb-1"
+                                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{title}</div>
+                                            <div className="text-[10px] text-zinc-500 leading-relaxed">{desc}</div>
                                         </button>
                                     );
                                 })}
@@ -722,9 +656,9 @@ export default function OnboardingPage() {
                         </motion.div>
                     )}
 
+                    {/* STEP 3 — Prefs */}
                     {step === 3 && (
-                        <motion.div key="prefs" variants={fadeUp} initial="hidden" animate="show" exit="exit"
-                            className="space-y-3">
+                        <motion.div key="prefs" variants={fadeUp} initial="hidden" animate="show" exit="exit" className="space-y-3">
                             <p className="text-[11px] text-indigo-400 uppercase tracking-[.15em] text-center mb-6">
                                 // collaboration preferences
                             </p>
@@ -734,14 +668,15 @@ export default function OnboardingPage() {
                                 { key: "commitment", label: "Commitment level", opts: ["Casual / hobby", "Serious side project", "Full commitment"] },
                                 { key: "timezone", label: "Timezone overlap", opts: ["Same timezone", "±3 hrs is fine", "Fully async ok"] },
                             ].map(({ key, label, opts }) => (
-                                <div key={key} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                                <div key={key} className="bg-zinc-900/40 border border-zinc-800 rounded-xl p-4">
                                     <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-3">{label}</p>
                                     <div className="flex gap-2 flex-wrap">
                                         {opts.map((o) => (
                                             <button key={o} onClick={() => setPref(key, o)}
-                                                className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${prefs[key] === o
-                                                    ? "bg-indigo-600 border-indigo-500 text-white"
-                                                    : "border-zinc-700 text-zinc-500 hover:border-indigo-500 hover:text-indigo-400"}`}>
+                                                className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${prefs[key] === o
+                                                        ? "bg-indigo-600 border-indigo-600 text-white"
+                                                        : "border-zinc-700 text-zinc-500 hover:border-indigo-800 hover:text-indigo-400"
+                                                    }`}>
                                                 {o}
                                             </button>
                                         ))}
@@ -753,35 +688,32 @@ export default function OnboardingPage() {
 
                 </AnimatePresence>
 
-                {/* ── Navigation ── */}
+                {/* Navigation */}
                 <div className="flex items-center justify-between mt-8">
-                    {/* Back — hidden if step 0 or if the user has already completed this step */}
                     <button
-                        onClick={() => step > 0 && !isStepLocked(step - 1) && setStep((s) => s - 1)}
-                        className={`text-xs text-zinc-600 hover:text-zinc-400 transition-colors ${step === 0 || isStepLocked(step - 1) ? "invisible" : ""}`}
+                        onClick={() => step > 0 && !isStepLocked(step - 1) && setStep(s => s - 1)}
+                        className={`text-sm text-zinc-600 hover:text-zinc-400 transition-colors ${step === 0 || isStepLocked(step - 1) ? "invisible" : ""}`}
                     >
                         ← back
                     </button>
 
                     <div className="flex items-center gap-3">
                         {step > 0 && step < steps.length - 1 && (
-                            <button
-                                onClick={() => setStep((s) => s + 1)}
-                                className="text-xs text-zinc-600 hover:text-zinc-400 flex items-center gap-1 transition-colors"
-                            >
-                                <SkipForward className="w-3 h-3" /> skip
+                            <button onClick={() => setStep(s => s + 1)}
+                                className="text-sm text-zinc-600 hover:text-zinc-400 flex items-center gap-1 transition-colors">
+                                <SkipForward className="w-3.5 h-3.5" strokeWidth={1.5} /> skip
                             </button>
                         )}
-
                         <button
                             onClick={advance}
                             disabled={!canAdvance() || advancing}
-                            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold tracking-wider px-5 py-2.5 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(99,102,241,.35)] min-w-[140px] justify-center"
+                            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all min-w-[160px] justify-center"
                         >
-                            {advancing
-                                ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />{STEP_LOADING_LABEL[step] ?? "saving..."}</>
-                                : <>{step < steps.length - 1 ? "next" : "go to dashboard"}<ChevronRight className="w-3.5 h-3.5" /></>
-                            }
+                            {advancing ? (
+                                <><Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.5} />{STEP_LOADING_LABEL[step] ?? "Saving..."}</>
+                            ) : (
+                                <>{step < steps.length - 1 ? "Next" : "Go to dashboard"} <ChevronRight className="w-4 h-4" strokeWidth={1.5} /></>
+                            )}
                         </button>
                     </div>
                 </div>
