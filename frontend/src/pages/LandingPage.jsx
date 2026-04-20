@@ -398,7 +398,7 @@ export default function LandingPage() {
                     </h2>
                     <p className="relative text-sm text-zinc-500 mb-10">Join thousands of developers already matching on DevMatch.</p>
                     <div className="relative">
-                        <GlowButton onClick={() => navigate("/login")}>./join-devmatch --free</GlowButton>
+                        <GlowButton onClick={() => navigate("/signup")}>./join-devmatch --free</GlowButton>
                     </div>
                 </div>
             </section>
