@@ -27,6 +27,7 @@ function App() {
           <Route path='/' element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
@@ -35,7 +36,7 @@ function App() {
 
           {/* Protected routes with AppShell */}
           <Route element={<AppShell />}>
-            <Route path="/onboarding" element={<OnboardingPage />} />
+            
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
