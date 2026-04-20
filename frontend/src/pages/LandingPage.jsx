@@ -176,7 +176,7 @@ function Marquee() {
             <style>{`@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}`}</style>
             <div style={{ display: "inline-flex", animation: "mq 28s linear infinite", whiteSpace: "nowrap" }}>
                 {items.map((item, i) => (
-                    <span key={i} className="inline-flex items-center gap-2 mx-8 text-[11px] text-zinc-700 tracking-widest uppercase">
+                    <span key={i} className="inline-flex items-center gap-2 mx-8 text-[14px] text-zinc-200 tracking-widest uppercase">
                         {item} <span className="text-zinc-800">✦</span>
                     </span>
                 ))}
@@ -210,7 +210,7 @@ export default function LandingPage() {
                 <div className="hidden md:flex items-center gap-10">
                     {["Features", "About"].map(l => (
                         <a key={l} href={`#${l.toLowerCase()}`}
-                            className="text-[11px] uppercase tracking-widest text-zinc-600 hover:text-zinc-300 transition-colors no-underline">
+                            className="text-[14px] uppercase tracking-widest text-zinc-200 hover:text-zinc-300 transition-colors no-underline">
                             {l}
                         </a>
                     ))}
@@ -246,7 +246,7 @@ export default function LandingPage() {
                             ship with.
                         </h1>
 
-                        <p className="text-sm text-zinc-500 leading-relaxed mb-10" style={{ maxWidth: 400 }}>
+                        <p className="text-lg text-zinc-500 leading-relaxed mb-10" style={{ maxWidth: 400 }}>
                             DevMatch reads your <span className="text-teal-400">public GitHub repos</span>, extracts real skills,
                             and connects you with developers who build the same things you do.
                         </p>
@@ -307,8 +307,8 @@ export default function LandingPage() {
                             <div className="w-10 h-10 flex items-center justify-center bg-zinc-900 border border-zinc-800 rounded-xl mb-5 text-zinc-400 group-hover:text-indigo-400 group-hover:border-indigo-900 transition-colors">
                                 <s.Icon size={18} strokeWidth={1.5} />
                             </div>
-                            <div className="text-sm font-bold text-zinc-100 mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.title}</div>
-                            <div className="text-xs text-zinc-500 leading-relaxed">{s.desc}</div>
+                            <div className="text-md font-bold text-zinc-100 mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.title}</div>
+                            <div className="text-md text-zinc-500 leading-relaxed">{s.desc}</div>
                             {i < 2 && <div className="hidden md:block absolute top-8 right-7 text-zinc-800">→</div>}
                         </div>
                     ))}
@@ -331,8 +331,8 @@ export default function LandingPage() {
                                 </div>
                                 <span className={`text-[10px] tracking-widest uppercase px-2.5 py-1 rounded font-medium ${f.tagCls}`}>{f.tag}</span>
                             </div>
-                            <div className="text-[15px] font-bold text-zinc-100 mb-3 leading-snug" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{f.title}</div>
-                            <p className="text-[13px] text-zinc-500 leading-relaxed">{f.desc}</p>
+                            <div className="text-[18px] font-bold text-zinc-100 mb-3 leading-snug" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{f.title}</div>
+                            <p className="text-[16px] text-zinc-500 leading-relaxed">{f.desc}</p>
                             {f.verify && (
                                 <div className="inline-flex items-center gap-2.5 mt-5 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3">
                                     <span className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
@@ -355,7 +355,7 @@ export default function LandingPage() {
                         style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(24px,2.8vw,40px)", letterSpacing: "-0.04em" }}>
                         Stop connecting with<br />people who <span style={{ color: "#3f3f46" }}>won't ship.</span>
                     </h2>
-                    <p className="text-sm text-zinc-500 leading-relaxed mb-8" style={{ maxWidth: 380 }}>
+                    <p className="text-md text-zinc-500 leading-relaxed mb-8" style={{ maxWidth: 380 }}>
                         DevMatch was built because traditional networks fail developers. You deserve matches based
                         on what you've actually built — not who you know or how polished your profile looks.
                     </p>
@@ -365,7 +365,7 @@ export default function LandingPage() {
                                 <div className="text-2xl font-black text-white" style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.03em" }}>
                                     {n}<span className="text-indigo-500">{s}</span>
                                 </div>
-                                <div className="text-[10px] text-zinc-700 tracking-widest uppercase mt-1">{l}</div>
+                                <div className="text-[12px] text-zinc-700 tracking-widest uppercase mt-1">{l}</div>
                             </div>
                         ))}
                     </div>
@@ -378,8 +378,8 @@ export default function LandingPage() {
                                 <c.Icon size={16} strokeWidth={1.5} className="text-zinc-400" />
                             </div>
                             <div>
-                                <div className="text-sm font-bold text-zinc-200 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{c.title}</div>
-                                <div className="text-[13px] text-zinc-500 leading-relaxed">{c.desc}</div>
+                                <div className="text-md font-bold text-zinc-200 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{c.title}</div>
+                                <div className="text-[16px] text-zinc-500 leading-relaxed">{c.desc}</div>
                             </div>
                         </div>
                     ))}
