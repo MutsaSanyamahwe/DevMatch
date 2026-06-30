@@ -1,21 +1,21 @@
 # DevMatch
 
-DevMatch is a developer matching platform — developers connect based on what they've actually built, not a self-written bio. The core idea: remove onboarding friction by auto-generating a developer's profile from real evidence instead of a blank form.
+DevMatch is a developer matching platform; developers connect based on what they've actually built, not a self-written bio. The core idea: remove onboarding friction by auto-generating a developer's profile from real evidence instead of a blank form.
 
 On signup, DevMatch hands a user's GitHub username and CV off to **[DevVerify](#part-of-a-larger-system)**, a sibling service that scans both sources and extracts:
-- From **GitHub** — projects, languages, and a working signal of what the person has actually built
-- From **CV** — education and certifications
+- From **GitHub** - projects, languages, and a working signal of what the person has actually built
+- From **CV** - education and certifications
 
 That extracted data pre-fills the profile, so the user is mostly just confirming details and adding personal info — not typing a profile from scratch.
 
 ## Features
 
-- **Authentication** — signup, login, and a forgot/reset password flow with emailed reset links
+- **Authentication** - signup, login, and a forgot/reset password flow with emailed reset links
 - **DevVerify-powered onboarding** — GitHub + CV scan pre-fills skills, projects, education, and certifications before the user touches a form field
-- **Matching system** — swipe-style discover feed, like/pass actions, pending likes (incoming and sent), and confirmed matches
-- **Matched-only DMs** — messaging unlocks only after a mutual match (enforced server-side: a message can only be sent against an existing `matches` row that the sender belongs to)
-- **Explore page** — surfaces DevMatch's two sibling systems, DevVerify and RepoRecommender, as part of the same ecosystem
-- **Profiles** — user info, goals, preferences, CV data, and avatar upload/removal
+- **Matching system** - swipe-style discover feed, like/pass actions, pending likes (incoming and sent), and confirmed matches
+- **Matched-only DMs** - messaging unlocks only after a mutual match (enforced server-side: a message can only be sent against an existing `matches` row that the sender belongs to)
+- **Explore page** - surfaces DevMatch's two sibling systems, DevVerify and RepoRecommender, as part of the same ecosystem
+- **Profiles** - user info, goals, preferences, CV data, and avatar upload/removal
 
 ## Tech Stack
 
@@ -106,8 +106,8 @@ DevMatch/
 DevMatch isn't standalone — it's the front-facing app in a small ecosystem of three connected services:
 
 - **DevMatch** (this repo) — the matching platform and product surface
-- **DevVerify** — scans a user's GitHub profile and CV during onboarding and returns structured data (projects, languages, education, certifications) that DevMatch uses to pre-fill the profile. DevMatch's onboarding flow calls DevVerify's `/analyze` endpoint directly with the GitHub username and CV file.
-- **RepoRecommender** — uses K-Means clustering on repository metadata to recommend repos similar to what a user has built. Linked from DevMatch's Explore page as a related system rather than embedded directly into the matching flow.
+- **DevVerify** — [Link](https://devverify-system-1.onrender.com/)scans a user's GitHub profile and CV during onboarding and returns structured data (projects, languages, education, certifications) that DevMatch uses to pre-fill the profile. DevMatch's onboarding flow calls DevVerify's `/analyze` endpoint directly with the GitHub username and CV file.
+- **RepoRecommender** — [Link](https://github-repository-recommender.onrender.com/)uses K-Means clustering on repository metadata to recommend repos similar to what a user has built. Linked from DevMatch's Explore page as a related system rather than embedded directly into the matching flow.
 
 This separation keeps identity/credential verification (DevVerify) and discovery (RepoRecommender) as independent services that DevMatch consumes, rather than building that logic into the matching platform itself.
 
