@@ -106,8 +106,8 @@ DevMatch/
 DevMatch isn't standalone — it's the front-facing app in a small ecosystem of three connected services:
 
 - **DevMatch** (this repo) — the matching platform and product surface
-- **DevVerify** — [Link](https://devverify-system-1.onrender.com/)scans a user's GitHub profile and CV during onboarding and returns structured data (projects, languages, education, certifications) that DevMatch uses to pre-fill the profile. DevMatch's onboarding flow calls DevVerify's `/analyze` endpoint directly with the GitHub username and CV file.
-- **RepoRecommender** — [Link](https://github-repository-recommender.onrender.com/)uses K-Means clustering on repository metadata to recommend repos similar to what a user has built. Linked from DevMatch's Explore page as a related system rather than embedded directly into the matching flow.
+- **DevVerify** — [Link](https://devverify-system-1.onrender.com/) scans a user's GitHub profile and CV during onboarding and returns structured data (projects, languages, education, certifications) that DevMatch uses to pre-fill the profile. DevMatch's onboarding flow calls DevVerify's `/analyze` endpoint directly with the GitHub username and CV file.
+- **RepoRecommender** — [Link](https://github-repository-recommender.onrender.com/) uses K-Means clustering on repository metadata to recommend repos similar to what a user has built. Linked from DevMatch's Explore page as a related system rather than embedded directly into the matching flow.
 
 This separation keeps identity/credential verification (DevVerify) and discovery (RepoRecommender) as independent services that DevMatch consumes, rather than building that logic into the matching platform itself.
 
