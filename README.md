@@ -2,6 +2,8 @@
 
 DevMatch is a developer matching platform; developers connect based on what they've actually built, not a self-written bio. The core idea: remove onboarding friction by auto-generating a developer's profile from real evidence instead of a blank form.
 
+**Live Demo** - [DevMatch](https://devmatch-1-hj4i.onrender.com/)
+
 On signup, DevMatch hands a user's GitHub username and CV off to **[DevVerify](#part-of-a-larger-system)**, a sibling service that scans both sources and extracts:
 - From **GitHub** - projects, languages, and a working signal of what the person has actually built
 - From **CV** - education and certifications
