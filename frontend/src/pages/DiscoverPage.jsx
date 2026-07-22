@@ -44,7 +44,7 @@ export default function DiscoverPage({ likedIds = new Set(), onLike }) {
         async function fetchDevelopers() {
             setLoading(true);
             try {
-                const res = await fetch(`https://devmatch-1npz.onrender.com/matches/discover-matches/${userid}`, {
+                const res = await fetch(`https://devmatch-production-7cd7.up.railway.app/matches/discover-matches/${userid}`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -75,7 +75,7 @@ export default function DiscoverPage({ likedIds = new Set(), onLike }) {
         });
 
         try {
-            const res = await fetch("https://devmatch-1npz.onrender.com/matches/like-pass", {
+            const res = await fetch("https://devmatch-production-7cd7.up.railway.app/matches/like-pass", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
