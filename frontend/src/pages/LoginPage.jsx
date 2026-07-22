@@ -26,7 +26,7 @@ export default function LoginPage() {
         setMessage(""); // reset any old messages
 
         try {
-            const res = await fetch("https://devmatch-1npz.onrender.com/auth/login", {
+            const res = await fetch("https://devmatch-production-7cd7.up.railway.app/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
