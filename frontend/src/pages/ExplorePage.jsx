@@ -4,7 +4,7 @@ import { ShieldCheck, GitBranch, Sparkles, ArrowRight } from "lucide-react";
 const systems = [
     {
         name: "devVerify",
-        url: "https://devverify-system-1.onrender.com",
+        url: "https://devverify.onrender.com",
         description:
             "Verify developer identity through repo history, contribution signals, and AI-backed skill validation.",
         icon: ShieldCheck,
@@ -13,7 +13,7 @@ const systems = [
     },
     {
         name: "repoRecommender",
-        url: "https://github-repository-recommender.onrender.com",
+        url: "https://repo-recommender.onrender.com",
         description:
             "AI engine that recommends repositories based on your stack, behavior patterns, and collaboration signals.",
         icon: GitBranch,
