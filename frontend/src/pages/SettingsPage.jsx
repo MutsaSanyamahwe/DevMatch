@@ -111,7 +111,7 @@ export default function SettingsPage() {
             formData.append("cv_file", cvFile);
             formData.append("github_username", ghDraft);
 
-            const res = await fetch("https://devverify-system.onrender.com/analyze", {
+            const res = await fetch("https://devverifysystem-production.up.railway.app/analyze", {
                 method: "POST",
                 body: formData,
             });
@@ -124,7 +124,7 @@ export default function SettingsPage() {
             const data = await res.json();
             if (!userid) throw new Error("No user ID found. Please log in again");
 
-            const saveRes = await fetch("https://devmatch-1npz.onrender.com/users/save-cv", {
+            const saveRes = await fetch("https://devmatch-production-7cd7.up.railway.app/users/save-cv", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
