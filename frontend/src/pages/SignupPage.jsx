@@ -30,7 +30,7 @@ export default function SignupPage() {
         setMessage("");
 
         try {
-            const res = await fetch("https://devmatch-1npz.onrender.com/auth/signup", {
+            const res = await fetch("https://devmatch-production-7cd7.up.railway.app/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
