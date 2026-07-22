@@ -43,9 +43,9 @@ export default function MatchesPage({ onLikeBack, onPass }) {
             setLoading(true);
             try {
                 const [rLiked, rMatched, rYouLiked] = await Promise.all([
-                    fetch(`https://devmatch-1npz.onrender.com/matches/pending-likes/${userid}`),
-                    fetch(`https://devmatch-1npz.onrender.com/matches/matches/${userid}`),
-                    fetch(`https://devmatch-1npz.onrender.com/matches/sent-pending-likes/${userid}`),
+                    fetch(`https://devmatch-production-7cd7.up.railway.app/matches/pending-likes/${userid}`),
+                    fetch(`https://devmatch-production-7cd7.up.railway.app/matches/matches/${userid}`),
+                    fetch(`https://devmatch-production-7cd7.up.railway.app/matches/sent-pending-likes/${userid}`),
                 ]);
                 const [dLiked, dMatched, dYouLiked] = await Promise.all([
                     rLiked.json(), rMatched.json(), rYouLiked.json(),
@@ -88,7 +88,7 @@ export default function MatchesPage({ onLikeBack, onPass }) {
             setCelebration({ show: true, dev });
         }
         try {
-            const res = await fetch(`https://devmatch-1npz.onrender.com/matches/like-pass`, {
+            const res = await fetch(`https://devmatch-production-7cd7.up.railway.app/matches/like-pass`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userid, target_id: targetId, action: "like" }),
@@ -108,7 +108,7 @@ export default function MatchesPage({ onLikeBack, onPass }) {
     const handlePass = async (targetId) => {
         setLikedYou((prev) => prev.filter((d) => d.userid !== targetId));
         try {
-            const res = await fetch(`https://devmatch-1npz.onrender.com/matches/like-pass`, {
+            const res = await fetch(`https://devmatch-production-7cd7.up.railway.app/matches/like-pass`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userid, target_id: targetId, action: "pass" }),
@@ -124,7 +124,7 @@ export default function MatchesPage({ onLikeBack, onPass }) {
         const dev = youLiked.find((d) => d.userid === targetId);
         setYouLiked((prev) => prev.filter((d) => d.userid !== targetId));
         try {
-            const res = await fetch(`https://devmatch-1npz.onrender.com/matches/like-pass`, {
+            const res = await fetch(`https://devmatch-production-7cd7.up.railway.app/matches/like-pass`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userid, target_id: targetId, action: "pass" }),
