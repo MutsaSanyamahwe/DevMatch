@@ -1,79 +1,83 @@
 # DevMatch
 
-DevMatch is a developer matching platform; developers connect based on what they've actually built, not a self-written bio. The core idea: remove onboarding friction by auto-generating a developer's profile from real evidence instead of a blank form.
+**Live Demo:** [DevMatch](https://devmatch-1-hj4i.onrender.com/)
 
-**Live Demo** - [DevMatch](https://devmatch-1-hj4i.onrender.com/)
+## The Problem
 
-On signup, DevMatch hands a user's GitHub username and CV off to **[DevVerify](#part-of-a-larger-system)**, a sibling service that scans both sources and extracts:
-- From **GitHub** - projects, languages, and a working signal of what the person has actually built
-- From **CV** - education and certifications
+Developer-matching and networking platforms almost universally rely on a self-written bio to represent who someone is. That's a weak signal:
 
-That extracted data pre-fills the profile, so the user is mostly just confirming details and adding personal info — not typing a profile from scratch.
+- Bios are aspirational, not evidence-based — anyone can claim "full-stack, 5 years, loves Python"
+- Writing a good one is its own skill, unrelated to being a good developer
+- Blank-form onboarding is friction before the product has proven any value
+- Two people can look identical on paper and be nothing alike in what they've actually shipped
+
+The result is a matching layer built on marketing copy instead of on what people have actually built.
+
+## What DevMatch Is
+
+DevMatch is a developer matching platform where connections form around **verified work, not a written bio.** Instead of asking a new user to describe themselves, it pulls the description from evidence that already exists: their GitHub account and their CV.
+
+## System Flow
+
+```
+ 1. SIGNUP
+    user submits GitHub username + CV
+                │
+                ▼
+ 2. AUTO-PROFILE (via DevVerify)
+    DevMatch's frontend calls DevVerify's
+    POST /analyze directly with those two inputs
+                │
+                ▼
+    DevVerify scans GitHub (projects, languages,
+    working signal) + parses the CV (education,
+    certifications) and returns structured JSON
+                │
+                ▼
+ 3. PRE-FILLED PROFILE
+    skills, projects, education, and certifications
+    are already populated — user reviews/confirms
+    and adds personal info, goals, and preferences
+                │
+                ▼
+ 4. DISCOVER
+    swipe-style feed of other evidence-backed profiles
+    like / pass actions recorded per user
+                │
+                ▼
+ 5. MATCH
+    mutual like → confirmed match created server-side
+                │
+                ▼
+ 6. MESSAGE
+    DMs unlock only after a confirmed match
+    (enforced server-side against the matches table)
+```
+
+Because the profile is generated rather than typed, the friction point that normally sits between "sign up" and "start discovering" is mostly removed — the user is confirming pre-extracted facts, not filling a blank form.
 
 ## Features
 
-- **Authentication** - signup, login, and a forgot/reset password flow with emailed reset links
+- **Authentication** — signup, login, and a forgot/reset password flow with emailed reset links
 - **DevVerify-powered onboarding** — GitHub + CV scan pre-fills skills, projects, education, and certifications before the user touches a form field
-- **Matching system** - swipe-style discover feed, like/pass actions, pending likes (incoming and sent), and confirmed matches
-- **Matched-only DMs** - messaging unlocks only after a mutual match (enforced server-side: a message can only be sent against an existing `matches` row that the sender belongs to)
-- **Explore page** - surfaces DevMatch's two sibling systems, DevVerify and RepoRecommender, as part of the same ecosystem
-- **Profiles** - user info, goals, preferences, CV data, and avatar upload/removal
+- **Matching system** — swipe-style discover feed, like/pass actions, pending likes (incoming and sent), and confirmed matches
+- **Matched-only DMs** — messaging unlocks only after a mutual match (enforced server-side: a message can only be sent against an existing `matches` row that the sender belongs to)
+- **Explore page** — surfaces DevMatch's two sibling systems, DevVerify and RepoRecommender, as part of the same ecosystem
+- **Profiles** — user info, goals, preferences, CV data, and avatar upload/removal
 
-## Tech Stack
+## Part of a Larger System
 
-**Frontend**
-- React 19 + Vite
-- React Router for routing
-- Tailwind CSS for styling
-- Framer Motion for animation
-- Axios for API calls
-- Supabase JS client (auth/session + direct data access from the client)
+DevMatch is the front-facing app in a small ecosystem of three connected services, each doing one job:
 
-**Backend**
-- Node.js + Express 5 (ESM)
-- Supabase (Postgres + Auth) as the primary data store
-- Multer for in-memory file upload handling (avatars)
-- Resend for transactional email (password reset)
-- CORS + dotenv
+- **DevMatch** (this repo) — the matching platform and product surface
+- **[DevVerify](https://devverify-system-1.onrender.com/)** — scans a user's GitHub profile and CV during onboarding and returns structured data (projects, languages, education, certifications). DevMatch's frontend calls DevVerify's `/analyze` endpoint directly with the GitHub username and CV file — this call bypasses DevMatch's own backend entirely.
+- **[RepoRecommender](https://github-repository-recommender.onrender.com/)** — uses K-Means clustering on repository metadata to recommend repos similar to what a user has built. Linked from DevMatch's Explore page as a related system rather than embedded into the matching flow.
 
-**Infra**
-- Dockerfile for the backend (Node 20 Alpine, production install, port 3000)
-
-## Project Structure
-
-```
-DevMatch/
-├── backend/
-│   ├── config/
-│   │   └── supabaseClient.js     # Supabase client init (service role)
-│   ├── controllers/               # Route handler logic
-│   ├── middleware/
-│   │   └── upload.js              # Multer in-memory storage config
-│   ├── routes/
-│   │   ├── authRoutes.js          # /auth
-│   │   ├── userRoutes.js          # /users
-│   │   ├── profileRoutes.js       # /profile
-│   │   ├── matchesRoutes.js       # /matches
-│   │   └── messagesRoutes.js      # /messages
-│   ├── dockerfile
-│   ├── index.js                   # Express app entry point
-│   └── package.json
-└── frontend/
-    ├── src/
-    │   ├── pages/                 # Route-level views (Login, Discover, Matches, Messages, etc.)
-    │   ├── components/
-    │   ├── context/
-    │   │   └── UserContext.jsx    # App-wide user/session state
-    │   └── supabase/
-    │       └── supabaseClient.js  # Supabase client init (anon key)
-    ├── vite.config.js
-    ├── tailwind.config.js
-    └── package.json
-```
+Keeping credential verification (DevVerify) and discovery-by-similarity (RepoRecommender) as separate services means DevMatch's own backend stays focused on identity, matching, and messaging — it doesn't need to know how a profile got built, only that it did.
 
 ## API Overview
 
-> Onboarding additionally calls an external endpoint directly from the frontend: `POST https://devverify-system.onrender.com/analyze`, sending the user's GitHub username and CV file to extract profile data before the form is shown. This call goes to DevVerify, not this repo's backend.
+> Onboarding calls an external endpoint directly from the frontend: `POST https://devverify-system.onrender.com/analyze`, sending the GitHub username and CV file to extract profile data before the form is shown. This goes to DevVerify, not this repo's backend.
 
 | Method | Route | Description |
 |---|---|---|
@@ -103,15 +107,25 @@ DevMatch/
 | GET | `/messages/conversations/:userid` | Get a user's conversation list |
 | POST | `/messages/mark-read` | Mark messages as read |
 
-## Part of a Larger System
+## Tech Stack
 
-DevMatch isn't standalone — it's the front-facing app in a small ecosystem of three connected services:
+**Frontend**
+- React 19 + Vite
+- React Router for routing
+- Tailwind CSS for styling
+- Framer Motion for animation
+- Axios for API calls
+- Supabase JS client (auth/session + direct data access from the client)
 
-- **DevMatch** (this repo) — the matching platform and product surface
-- **DevVerify** — [Link](https://devverify-system-1.onrender.com/) scans a user's GitHub profile and CV during onboarding and returns structured data (projects, languages, education, certifications) that DevMatch uses to pre-fill the profile. DevMatch's onboarding flow calls DevVerify's `/analyze` endpoint directly with the GitHub username and CV file.
-- **RepoRecommender** — [Link](https://github-repository-recommender.onrender.com/) uses K-Means clustering on repository metadata to recommend repos similar to what a user has built. Linked from DevMatch's Explore page as a related system rather than embedded directly into the matching flow.
+**Backend**
+- Node.js + Express 5 (ESM)
+- Supabase (Postgres + Auth) as the primary data store
+- Multer for in-memory file upload handling (avatars)
+- Resend for transactional email (password reset)
+- CORS + dotenv
 
-This separation keeps identity/credential verification (DevVerify) and discovery (RepoRecommender) as independent services that DevMatch consumes, rather than building that logic into the matching platform itself.
+**Infra**
+- Dockerfile for the backend (Node 20 Alpine, production install, port 3000)
 
 ## Getting Started
 
@@ -178,6 +192,38 @@ docker run -p 3000:3000 --env-file .env devmatch-backend
 ```
 
 > Note: the Dockerfile exposes port `3000`; align `PORT` in your `.env` (or the Express listen port) accordingly when running in a container.
+
+## Project Structure
+
+```
+DevMatch/
+├── backend/
+│   ├── config/
+│   │   └── supabaseClient.js     # Supabase client init (service role)
+│   ├── controllers/               # Route handler logic
+│   ├── middleware/
+│   │   └── upload.js              # Multer in-memory storage config
+│   ├── routes/
+│   │   ├── authRoutes.js          # /auth
+│   │   ├── userRoutes.js          # /users
+│   │   ├── profileRoutes.js       # /profile
+│   │   ├── matchesRoutes.js       # /matches
+│   │   └── messagesRoutes.js      # /messages
+│   ├── dockerfile
+│   ├── index.js                   # Express app entry point
+│   └── package.json
+└── frontend/
+    ├── src/
+    │   ├── pages/                 # Route-level views (Login, Discover, Matches, Messages, etc.)
+    │   ├── components/
+    │   ├── context/
+    │   │   └── UserContext.jsx    # App-wide user/session state
+    │   └── supabase/
+    │       └── supabaseClient.js  # Supabase client init (anon key)
+    ├── vite.config.js
+    ├── tailwind.config.js
+    └── package.json
+```
 
 ## Environment Variables Summary
 
