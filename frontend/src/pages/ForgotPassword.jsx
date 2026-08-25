@@ -13,7 +13,7 @@ export default function ForgotPassword() {
         setMessage("");
 
         try {
-            const res = await fetch("https://devmatch-production-7cd7.up.railway.app/auth/forgot-password", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/auth/forgot-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
