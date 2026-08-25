@@ -310,7 +310,7 @@ export default function OnboardingPage() {
             setGithubSkills(data.github_skills || []);
             setVerified(true);
             if (!userid) throw new Error("No user ID found.");
-            const saveRes = await fetch("https://devmatch-production-7cd7.up.railway.app/users/save-cv", {
+            const saveRes = await fetch("https://devmatch-1npz.onrender.com/users/save-cv", {
                 method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid, cv_info: data.cv_info || { certifications: [], degrees: [] }, github_skills: data.github_skills || [], github_data: data.github_data || [] }),
             });
@@ -329,12 +329,12 @@ export default function OnboardingPage() {
             if (avatarFile) {
                 const fd = new FormData();
                 fd.append("avatar", avatarFile); fd.append("userid", userid);
-                const uploadRes = await fetch("https://devmatch-production-7cd7.up.railway.app/users/upload-avatar", { method: "POST", body: fd });
+                const uploadRes = await fetch("https://devmatch-1npz.onrender.com/users/upload-avatar", { method: "POST", body: fd });
                 const uploadData = await uploadRes.json();
                 if (!uploadRes.ok) throw new Error(uploadData.message || "Avatar upload failed");
                 avatarUrl = uploadData.avatarUrl;
             }
-            const res = await fetch("https://devmatch-production-7cd7.up.railway.app/users/profile", {
+            const res = await fetch("https://devmatch-1npz.onrender.com/users/profile", {
                 method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid, username, age, sex, country, city, avatarUrl, devType }),
             });
@@ -345,7 +345,7 @@ export default function OnboardingPage() {
 
     const saveUserGoals = async () => {
         if (!userid) return;
-        await fetch("https://devmatch-production-7cd7.up.railway.app/users/save-goals", {
+        await fetch("https://devmatch-1npz.onrender.com/users/save-goals", {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userid, goals: selectedGoals }),
         });
@@ -353,7 +353,7 @@ export default function OnboardingPage() {
 
     const saveUserPreferences = async () => {
         if (!userid) return;
-        await fetch("https://devmatch-production-7cd7.up.railway.app/users/save-preferences", {
+        await fetch("https://devmatch-1npz.onrender.com/users/save-preferences", {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userid, preferences: prefs }),
         });
