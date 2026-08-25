@@ -57,9 +57,9 @@ export default function ViewProfilePage() {
         const fetchAll = async () => {
             try {
                 const [resProfile, resGoals, resPrefs] = await Promise.all([
-                    axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/user-info/${targetId}`),
-                    axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/get-user-goals/${targetId}`),
-                    axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/get-user-preferences/${targetId}`),
+                    axios.get(`https://devmatch-1npz.onrender.com/profile/user-info/${targetId}`),
+                    axios.get(`https://devmatch-1npz.onrender.com/profile/get-user-goals/${targetId}`),
+                    axios.get(`https://devmatch-1npz.onrender.com/profile/get-user-preferences/${targetId}`),
                 ]);
 
                 const base = resProfile.data;
@@ -86,7 +86,7 @@ export default function ViewProfilePage() {
 
         const fetchCv = async () => {
             try {
-                const res = await axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/get-cv-data/${targetId}`);
+                const res = await axios.get(`https://devmatch-1npz.onrender.com/profile/get-cv-data/${targetId}`);
                 setCvData(res.data);
             } catch (err) {
                 console.error("Failed to fetch CV data:", err);
@@ -115,7 +115,7 @@ export default function ViewProfilePage() {
 
                     try {
                         const res = await axios.get(
-                            `https://devmatch-production-7cd7.up.railway.app/profile/user-info/${otherId}`
+                            `https://devmatch-1npz.onrender.com/profile/user-info/${otherId}`
                         );
 
                         const dev = {
@@ -143,7 +143,7 @@ export default function ViewProfilePage() {
 
         try {
             const res = await axios.post(
-                "https://devmatch-production-7cd7.up.railway.app/matches/like-pass",
+                "https://devmatch-1npz.onrender.com/matches/like-pass",
                 {
                     user_id: user.userid,
                     target_id: targetId,
