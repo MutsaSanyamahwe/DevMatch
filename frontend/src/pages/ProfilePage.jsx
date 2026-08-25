@@ -136,13 +136,13 @@ export default function ProfilePage() {
         setProfile({ ...draft });
         try {
             if (s === "goals") {
-                await axios.post(`https://devmatch-production-7cd7.up.railway.app/users/save-goals`, { userid, goals: draft.goals });
+                await axios.post(`https://devmatch-1npz.onrender.com/users/save-goals`, { userid, goals: draft.goals });
             }
             if (s === "prefs") {
-                await axios.post(`https://devmatch-production-7cd7.up.railway.app/users/save-preferences`, { userid, preferences: draft.preferences });
+                await axios.post(`https://devmatch-1npz.onrender.com/users/save-preferences`, { userid, preferences: draft.preferences });
             }
             if (s === "personal") {
-                await axios.put(`https://devmatch-production-7cd7.up.railway.app/profile/update-user-info/${userid}`, {
+                await axios.put(`https://devmatch-1npz.onrender.com/profile/update-user-info/${userid}`, {
                     name: draft.firstName, surname: draft.lastName, username: draft.username,
                     email: draft.email, age: draft.age, country: draft.country, city: draft.city,
                     bio: draft.bio, devType: draft.devType,
@@ -158,9 +158,9 @@ export default function ProfilePage() {
         const fetchProfile = async () => {
             try {
                 const [resProfile, resGoals, resPrefs] = await Promise.all([
-                    axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/user-info/${userid}`),
-                    axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/get-user-goals/${userid}`),
-                    axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/get-user-preferences/${userid}`),
+                    axios.get(`https://devmatch-1npz.onrender.com/profile/user-info/${userid}`),
+                    axios.get(`https://devmatch-1npz.onrender.com/profile/get-user-goals/${userid}`),
+                    axios.get(`https://devmatch-1npz.onrender.com/profile/get-user-preferences/${userid}`),
                 ]);
                 const base = resProfile.data;
                 const mapped = {
@@ -186,7 +186,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (!userid) return;
-        axios.get(`https://devmatch-production-7cd7.up.railway.app/profile/get-cv-data/${userid}`)
+        axios.get(`https://devmatch-1npz.onrender.com/profile/get-cv-data/${userid}`)
             .then(res => setCvData(res.data))
             .catch(err => console.error("Failed to fetch CV data:", err));
     }, [userid]);
@@ -200,7 +200,7 @@ export default function ProfilePage() {
         formData.append("userid", userid);
         formData.append("avatar", file);
         try {
-            const res = await axios.post("https://devmatch-production-7cd7.up.railway.app/users/upload-avatar", formData, {
+            const res = await axios.post("https://devmatch-1npz.onrender.com/users/upload-avatar", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setPhotoUrl(res.data.avatarUrl);
@@ -214,7 +214,7 @@ export default function ProfilePage() {
 
     const handleRemovePhoto = async () => {
         try {
-            await axios.post("https://devmatch-production-7cd7.up.railway.app/users/remove-avatar", { userid });
+            await axios.post("https://devmatch-1npz.onrender.com/users/remove-avatar", { userid });
             setPhotoUrl(null);
             setProfile(p => ({ ...p, avatarUrl: null }));
             setDraft(d => ({ ...d, avatarUrl: null }));
