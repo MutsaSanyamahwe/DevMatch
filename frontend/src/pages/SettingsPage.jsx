@@ -124,7 +124,7 @@ export default function SettingsPage() {
             const data = await res.json();
             if (!userid) throw new Error("No user ID found. Please log in again");
 
-            const saveRes = await fetch("https://devmatch-production-7cd7.up.railway.app/users/save-cv", {
+            const saveRes = await fetch("https://devmatch-1npz.onrender.com/users/save-cv", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
